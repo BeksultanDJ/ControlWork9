@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTransactions } from './reducers/transactionSlice';
+import { getTransactions, deleteTransactionData } from './reducers/transactionSlice';
 import AddExIn from './Add.tsx';
+import dayjs from 'dayjs';
+import { NavLink } from 'react-router-dom';
 
 const DisplayInfo: React.FC = () => {
     const dispatch = useDispatch();
@@ -16,17 +18,23 @@ const DisplayInfo: React.FC = () => {
         setShowAddForm(!showAddForm);
     };
 
+    const handleDelete = (transactionId: string) => {
+        dispatch(deleteTransactionData(transactionId));
+    };
+
     const handleCloseForm = () => {
         setShowAddForm(false);
     };
 
     return (
-        <>
+        <div>
             <header>
                 <div className="container">
                     <h2>Finance Tracker</h2>
                     <div className="Links">
-                        <strong>Categories</strong>
+                        <NavLink to="/categories">
+                            <strong>Categories</strong>
+                        </NavLink>
                         <strong onClick={toggleAddForm}>Add</strong>
                     </div>
                 </div>
@@ -36,13 +44,13 @@ const DisplayInfo: React.FC = () => {
                     transactions.map((transaction, index) => (
                         <div className="card" key={index}>
                             <div className="cardsInfo">
-                                <p>Date: {transaction.createdAt}</p>
+                                <p>Date: {dayjs(transaction.createdAt).format('DD.MM.YYYY HH:mm:ss')}</p>
                                 <p>Category: {transaction.category}</p>
                                 <strong>Sum: {transaction.amount}</strong>
                             </div>
                             <div className="btns">
                                 <button>Edit</button>
-                                <button>Delete</button>
+                                <button onClick={() => handleDelete(transaction.id)}>Delete</button>
                             </div>
                         </div>
                     ))
@@ -51,7 +59,7 @@ const DisplayInfo: React.FC = () => {
                 )}
             </div>
             {showAddForm && <AddExIn handleCloseForm={handleCloseForm} />}
-        </>
+        </div>
     );
 };
 
