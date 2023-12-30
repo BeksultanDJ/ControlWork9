@@ -25,25 +25,3 @@ export const sendTransactionData = createAsyncThunk(
     }
 );
 
-export const fetchTransactions = createAsyncThunk(
-    'transactions/fetchTransactions',
-    async () => {
-        try {
-            const response = await fetch('https://controll-17843-default-rtdb.europe-west1.firebasedatabase.app/transactions.json', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            throw new Error('Failed to fetch transactions');
-        }
-    }
-);
