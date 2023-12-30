@@ -62,6 +62,15 @@
   text-align: left;
 }
 
+.cardsInfoCategories {
+  display: flex;
+
+}
+
+.cardsInfoCategories h3 {
+  margin: 0 10px;
+}
+
 .read-the-docs {
   color: #888;
 }
