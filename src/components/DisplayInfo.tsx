@@ -1,14 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTransactions } from './reducers/transactionSlice';
+import AddExIn from './Add.tsx';
 
 const DisplayInfo: React.FC = () => {
     const dispatch = useDispatch();
     const transactions = useSelector((state: any) => state.transactions.transactions);
+    const [showAddForm, setShowAddForm] = useState(false);
 
     useEffect(() => {
         dispatch(getTransactions());
     }, [dispatch]);
+
+    const toggleAddForm = () => {
+        setShowAddForm(!showAddForm);
+    };
 
     return (
         <>
@@ -17,7 +23,7 @@ const DisplayInfo: React.FC = () => {
                     <h2>Finance Tracker</h2>
                     <div className="Links">
                         <strong>Categories</strong>
-                        <strong>Add</strong>
+                        <strong onClick={toggleAddForm}>Add</strong>
                     </div>
                 </div>
             </header>
@@ -38,6 +44,7 @@ const DisplayInfo: React.FC = () => {
                     <p>No transactions available</p>
                 )}
             </div>
+            {showAddForm && <AddExIn />}
         </>
     );
 };

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFormData, clearFormData } from './reducers/transactionSlice';
 import { sendTransactionData } from './reducers/transactionActions';
 
-const AddExIn = () => {
+const AddExIn = ({handleCloseForm}) => {
     const dispatch = useDispatch();
     const formData = useSelector((state) => state.transactions.formData);
 
@@ -23,7 +23,7 @@ const AddExIn = () => {
     };
 
     return (
-        <div>
+        <div className="modal">
             <form className="FormAdd" onSubmit={handleSubmit}>
                 <select name="type" onChange={handleChange}>
                     <option value="income">Income</option>
@@ -40,8 +40,8 @@ const AddExIn = () => {
                     value={formData.amount}
                     onChange={handleChange}
                 />
-                <button type="submit">Submit</button>
-                <button type="button">Cancel</button>
+                <button type="submit" onClick={handleCloseForm}>Submit</button>
+                <button type="button" onClick={handleCloseForm}>Cancel</button>
             </form>
         </div>
     );
