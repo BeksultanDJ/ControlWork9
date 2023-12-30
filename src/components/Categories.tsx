@@ -1,22 +1,27 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { sendCategoryData } from './reducers/transactionSlice';
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendCategoryData, getCategory } from './reducers/categorySlice';
+import { NavLink } from 'react-router-dom';
 
 const Categories = () => {
     const dispatch = useDispatch();
+    const categories = useSelector((state: any) => state.categories.categories);
     const [formData, setFormData] = useState({
         type: '',
         name: ''
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    useEffect(() => {
+        dispatch(getCategory());
+    }, [dispatch]);
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = (event) => {
+        event.preventDefault();
 
         dispatch(sendCategoryData(formData))
             .then(() => {
@@ -56,21 +61,33 @@ const Categories = () => {
                     value={formData.type}
                     onChange={handleChange}
                 >
+                    <option value="income">IDK</option>
                     <option value="income">Income</option>
                     <option value="expense">Expense</option>
                 </select>
                 <button type="submit">Submit</button>
             </form>
-            <div className="card">
-                <div>
-                    <p>Food</p>
-                    <p>Type</p>
-                </div>
-                <button>Edit</button>
-                <button>Delete</button>
+            <div className="cardsContainer">
+                {Array.isArray(categories) && categories.length > 0 ? (
+                    categories.map((category, index) => (
+                        <div className="card" key={index}>
+                            <div className="cardsInfoCategories">
+                                <h3>{category.name}</h3>
+                                <h3>{category.type}</h3>
+                            </div>
+                            <div className="btns">
+                                <button>Edit</button>
+                                <button>Delete</button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p>No categories available</p>
+                )}
             </div>
         </div>
     );
 };
+
 
 export default Categories;
