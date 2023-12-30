@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearFormData } from './reducers/transactionSlice';
 import { sendTransactionData } from './reducers/transactionActions';
+import { v4 as uuidv4 } from 'uuid';
 
 const AddExIn = ({ handleCloseForm }) => {
     const dispatch = useDispatch();
     const [localFormData, setLocalFormData] = useState({
+        id: '',
         type: '',
         category: '',
         amount: '',
@@ -23,6 +25,7 @@ const AddExIn = ({ handleCloseForm }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const transactionData = {
+            id: uuidv4(), // Создание уникального идентификатора с помощью uuidv4()
             category: localFormData.category,
             amount: parseFloat(localFormData.amount),
             createdAt: new Date().toISOString(),
@@ -40,8 +43,9 @@ const AddExIn = ({ handleCloseForm }) => {
                     <option value="expense">Expense</option>
                 </select>
                 <select name="category" onChange={handleChange}>
-                    <option value="category1">Category 1</option>
-                    <option value="category2">Category 2</option>
+                    <option value="category">Category</option>
+                    <option value="Category 1">Category 1</option>
+                    <option value="Category 2">Category 2</option>
                 </select>
                 <input
                     type="text"
