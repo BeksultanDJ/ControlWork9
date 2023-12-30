@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { clearFormData } from './reducers/transactionSlice';
 import { sendTransactionData } from './reducers/transactionActions';
+import { getCategory } from './reducers/categorySlice';
 import { v4 as uuidv4 } from 'uuid';
 
 const AddExIn = ({ handleCloseForm }) => {
@@ -12,6 +13,11 @@ const AddExIn = ({ handleCloseForm }) => {
         category: '',
         amount: '',
     });
+    const categories = useSelector((state) => state.categories.categories); // Получаем категории из хранилища Redux
+
+    useEffect(() => {
+        dispatch(getCategory());
+    }, [dispatch]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -25,7 +31,7 @@ const AddExIn = ({ handleCloseForm }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const transactionData = {
-            id: uuidv4(), // Создание уникального идентификатора с помощью uuidv4()
+            id: uuidv4(),
             category: localFormData.category,
             amount: parseFloat(localFormData.amount),
             createdAt: new Date().toISOString(),
@@ -43,9 +49,12 @@ const AddExIn = ({ handleCloseForm }) => {
                     <option value="expense">Expense</option>
                 </select>
                 <select name="category" onChange={handleChange}>
-                    <option value="category">Category</option>
-                    <option value="Category 1">Category 1</option>
-                    <option value="Category 2">Category 2</option>
+                    <option value="">Category</option>
+                    {categories.map((category) => (
+                        <option key={category.id} value={category.name}>
+                            {category.name}
+                        </option>
+                    ))}
                 </select>
                 <input
                     type="text"
@@ -55,7 +64,9 @@ const AddExIn = ({ handleCloseForm }) => {
                     onChange={handleChange}
                 />
                 <button type="submit">Submit</button>
-                <button type="button" onClick={handleCancel}>Cancel</button>
+                <button type="button" onClick={handleCancel}>
+                    Cancel
+                </button>
             </form>
         </div>
     );
