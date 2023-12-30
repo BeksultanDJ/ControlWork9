@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendCategoryData, getCategory } from './reducers/categorySlice';
+import { sendCategoryData, getCategory, deleteCategoryData } from './reducers/categorySlice';
 import { NavLink } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import {deleteTransactionData} from "./reducers/transactionSlice.ts";
 
 const Categories = () => {
     const dispatch = useDispatch();
     const categories = useSelector((state: any) => state.categories.categories);
     const [formData, setFormData] = useState({
+        id: '',
         type: '',
-        name: ''
+        name: '',
     });
 
     useEffect(() => {
@@ -20,14 +23,24 @@ const Categories = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+  
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        dispatch(sendCategoryData(formData))
+        const newCategory = {
+            id: uuidv4(),
+            type: formData.type,
+            name: formData.name,
+        };
+
+
+        dispatch(sendCategoryData(newCategory))
             .then(() => {
                 setFormData({
+                    id: '',
                     type: '',
-                    name: ''
+                    name: '',
                 });
             })
             .catch((error) => {
@@ -77,7 +90,7 @@ const Categories = () => {
                             </div>
                             <div className="btns">
                                 <button>Edit</button>
-                                <button>Delete</button>
+                                <button onClick={() => handleDelete(category.id)}>Delete</button>
                             </div>
                         </div>
                     ))
