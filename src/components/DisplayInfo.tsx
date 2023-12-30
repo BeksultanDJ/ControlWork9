@@ -46,7 +46,7 @@ const DisplayInfo: React.FC = () => {
                             <div className="cardsInfo">
                                 <p>Date: {dayjs(transaction.createdAt).format('DD.MM.YYYY HH:mm:ss')}</p>
                                 <p>Category: {transaction.category}</p>
-                                <strong>Sum: {transaction.amount}</strong>
+                                <strong>Sum: {transaction.amount} KGZ</strong>
                             </div>
                             <div className="btns">
                                 <button>Edit</button>
