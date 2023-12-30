@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { sendCategoryData, getCategory, deleteCategoryData } from './reducers/categorySlice';
 import { NavLink } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import {deleteTransactionData} from "./reducers/transactionSlice.ts";
 
 const Categories = () => {
     const dispatch = useDispatch();
@@ -23,7 +22,10 @@ const Categories = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-  
+    const handleDelete = (categoryId: string) => {
+        dispatch(deleteCategoryData(categoryId));
+        console.log('Deleting category with ID:', categoryId);
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
