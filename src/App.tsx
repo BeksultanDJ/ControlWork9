@@ -7,8 +7,8 @@ function App() {
 
   return (
     <>
-        <DisplayInfo/>
         <Routes>
+            <Route path="/" element={<DisplayInfo/>}/>
             <Route path="categories" element={<Categories/>}/>
         </Routes>
     </>
