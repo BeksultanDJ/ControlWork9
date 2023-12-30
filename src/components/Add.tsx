@@ -1,25 +1,35 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { setFormData, clearFormData } from './reducers/transactionSlice';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { clearFormData } from './reducers/transactionSlice';
 import { sendTransactionData } from './reducers/transactionActions';
 
-const AddExIn = ({handleCloseForm}) => {
+const AddExIn = ({ handleCloseForm }) => {
     const dispatch = useDispatch();
-    const formData = useSelector((state) => state.transactions.formData);
+    const [localFormData, setLocalFormData] = useState({
+        type: '',
+        category: '',
+        amount: '',
+    });
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        dispatch(setFormData({ ...formData, [name]: value }));
+        setLocalFormData({ ...localFormData, [name]: value });
+    };
+
+    const handleCancel = () => {
+        handleCloseForm();
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const transactionData = {
-            category: formData.category,
-            amount: parseFloat(formData.amount),
+            category: localFormData.category,
+            amount: parseFloat(localFormData.amount),
             createdAt: new Date().toISOString(),
         };
         dispatch(sendTransactionData(transactionData));
         dispatch(clearFormData());
+        handleCloseForm();
     };
 
     return (
@@ -37,11 +47,11 @@ const AddExIn = ({handleCloseForm}) => {
                     type="text"
                     name="amount"
                     placeholder="Enter sum"
-                    value={formData.amount}
+                    value={localFormData.amount}
                     onChange={handleChange}
                 />
-                <button type="submit" onClick={handleCloseForm}>Submit</button>
-                <button type="button" onClick={handleCloseForm}>Cancel</button>
+                <button type="submit">Submit</button>
+                <button type="button" onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     );

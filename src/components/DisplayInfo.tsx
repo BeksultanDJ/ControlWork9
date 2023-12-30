@@ -16,6 +16,10 @@ const DisplayInfo: React.FC = () => {
         setShowAddForm(!showAddForm);
     };
 
+    const handleCloseForm = () => {
+        setShowAddForm(false);
+    };
+
     return (
         <>
             <header>
@@ -36,15 +40,17 @@ const DisplayInfo: React.FC = () => {
                                 <p>Category: {transaction.category}</p>
                                 <strong>Sum: {transaction.amount}</strong>
                             </div>
-                            <button>Edit</button>
-                            <button>Delete</button>
+                            <div className="btns">
+                                <button>Edit</button>
+                                <button>Delete</button>
+                            </div>
                         </div>
                     ))
                 ) : (
                     <p>No transactions available</p>
                 )}
             </div>
-            {showAddForm && <AddExIn />}
+            {showAddForm && <AddExIn handleCloseForm={handleCloseForm} />}
         </>
     );
 };
